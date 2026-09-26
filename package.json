@@ -1,0 +1,19 @@
+{
+  "name": "unisphere-events",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/api",
+    "apps/web"
+  ],
+  "scripts": {
+    "dev:api": "npm --workspace apps/api run dev",
+    "dev:web": "npx --yes serve apps/web -l 5173",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:migrate": "npm --workspace apps/api run db:migrate",
+    "db:seed": "npm --workspace apps/api run db:seed",
+    "db:reset": "npm --workspace apps/api run db:reset",
+    "setup": "npm install && npm run db:up && sleep 3 && npm run db:migrate && npm run db:seed"
+  }
+}

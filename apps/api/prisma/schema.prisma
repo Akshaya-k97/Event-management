@@ -1,0 +1,142 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  ORGANIZER
+  ADMIN
+}
+
+enum EventStatus {
+  DRAFT
+  PENDING_APPROVAL
+  APPROVED
+  REJECTED
+  CANCELLED
+  COMPLETED
+}
+
+enum RegistrationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+  WAITLISTED
+}
+
+enum PaymentStatus {
+  NOT_REQUIRED
+  PENDING
+  PAID
+  REFUNDED
+  FAILED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  fullName     String
+  studentId    String?  @unique
+  role         Role     @default(STUDENT)
+  department   String?
+  avatarUrl    String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  organizedEvents Event[]        @relation("EventOrganizer")
+  registrations   Registration[]
+  checkIns        CheckIn[]
+
+  @@index([role])
+}
+
+model Event {
+  id               String      @id @default(cuid())
+  title            String
+  description      String
+  category         String
+  bannerUrl        String?
+  startsAt         DateTime
+  endsAt           DateTime
+  venue            String
+  capacity         Int
+  priceCents       Int         @default(0)
+  requiresApproval Boolean     @default(false)
+  status           EventStatus @default(DRAFT)
+  rejectionReason  String?
+  organizerId      String
+  organizer        User        @relation("EventOrganizer", fields: [organizerId], references: [id])
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  registrations Registration[]
+  checkIns      CheckIn[]
+
+  @@index([status, startsAt])
+  @@index([organizerId])
+}
+
+model Registration {
+  id            String             @id @default(cuid())
+  eventId       String
+  userId        String
+  status        RegistrationStatus @default(PENDING)
+  paymentStatus PaymentStatus      @default(NOT_REQUIRED)
+  amountCents   Int                @default(0)
+  qrToken       String             @unique
+  checkedInAt   DateTime?
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  event   Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  checkIn CheckIn? // <-- ADD THIS LINE
+
+  @@unique([eventId, userId])
+  @@index([eventId, status])
+}
+
+model CheckIn {
+  id             String   @id @default(cuid())
+  registrationId String   @unique
+  eventId        String
+  userId         String
+  scannedById    String
+  scannedAt      DateTime @default(now())
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  event        Event        @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([eventId])
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  action     String
+  entityType String
+  entityId   String
+  metadata   Json?
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId])
+}

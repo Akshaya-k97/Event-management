@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniSphere Events - College Event Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #4cc9f0;
+            --success: #4ade80;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --light: #f8fafc;
+            --dark: #1e293b;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 3rem 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .feature-card, .dashboard-section, .payment-card, .receipt {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .feature-card {
+            padding: 1.5rem;
+            height: 100%;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .event-card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            height: 100%;
+        }
+
+        .event-card:hover { transform: translateY(-5px); }
+
+        .event-img {
+            height: 180px;
+            object-fit: cover;
+            width: 100%;
+        }
+
+        .category-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .progress { height: 8px; border-radius: 10px; }
+
+        .dashboard-section { padding: 2rem; margin-bottom: 2rem; }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-number { font-size: 2.5rem; font-weight: 700; margin-bottom: 0; }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4); }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            animation: slideIn 0.3s ease;
+            max-width: 350px;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .qr-container { background: white; padding: 2rem; border-radius: 12px; text-align: center; }
+
+        #qrcode {
+            display: inline-block;
+            padding: 12px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 0;
+            margin-top: 4rem;
+        }
+
+        .section-title {
+            position: relative;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 4px;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            border-radius: 2px;
+        }
+
+        .payment-card { padding: 2rem; }
+
+        .receipt {
+            padding: 2rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .receipt-header {
+            border-bottom: 2px dashed #e2e8f0;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .receipt-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .receipt-total {
+            border-top: 2px solid #e2e8f0;
+            padding-top: 1rem;
+            margin-top: 1rem;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .payment-method {
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .payment-method:hover, .payment-method.active {
+            border-color: var(--primary);
+            background-color: #f0f4ff;
+        }
+
+        .card-input {
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 0.75rem;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .card-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #64748b;
+        }
+        .empty-state i { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
+
+        /* Accessible focus */
+        .nav-link:focus-visible,
+        .btn:focus-visible,
+        a:focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        /* Card form toggle */
+        .d-none-important { display: none !important; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="#" onclick="showSection('home'); return false;">
+                <i class="fas fa-globe-americas me-2" aria-hidden="true"></i>
+                UniSphere Events
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#" data-section="home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" data-section="events">Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" data-section="dashboard">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" data-section="create">Create Event</a></li>
+                </ul>
+                <div class="navbar-nav">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle me-1" aria-hidden="true"></i> Alex Johnson
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#" data-section="profile"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#" data-section="my-events"><i class="fas fa-calendar-check me-2"></i>My Events</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" data-logout><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container my-4">
+        <!-- Home -->
+        <section id="home-section" class="section">
+            <div class="hero-section">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <h1 class="display-5 fw-bold">Manage College Events Effortlessly</h1>
+                        <p class="lead mb-4">UniSphere Events is your all-in-one platform for discovering, creating, and managing college events with QR check-ins and real-time analytics.</p>
+                        <div class="d-flex gap-3 flex-wrap">
+                            <button class="btn btn-light btn-lg" data-section="events">
+                                <i class="fas fa-calendar-alt me-2"></i>Browse Events
+                            </button>
+                            <button class="btn btn-outline-light btn-lg" data-section="create">
+                                <i class="fas fa-plus me-2"></i>Create Event
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 text-center mt-4 mt-lg-0">
+                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                             class="img-fluid rounded-3 shadow" alt="Students collaborating at an event">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-12"><h2 class="section-title">Why Choose UniSphere Events?</h2></div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon bg-primary bg-opacity-10 text-primary"><i class="fas fa-qrcode"></i></div>
+                        <h4>QR Code Check-ins</h4>
+                        <p class="text-muted">Streamline attendance with unique QR codes per registration.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon bg-success bg-opacity-10 text-success"><i class="fas fa-chart-line"></i></div>
+                        <h4>Real-time Analytics</h4>
+                        <p class="text-muted">Track performance with detailed analytics and attendance reports.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon bg-warning bg-opacity-10 text-warning"><i class="fas fa-tasks"></i></div>
+                        <h4>Approval Workflows</h4>
+                        <p class="text-muted">Manage event and registration approvals with flexible workflows.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12 d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="section-title mb-0">Upcoming Events</h2>
+                    <a href="#" class="btn btn-outline-primary" data-section="events">View All</a>
+                </div>
+                <div id="upcoming-events" class="row"></div>
+            </div>
+        </section>
+
+        <!-- Events -->
+        <section id="events-section" class="section d-none">
+            <div class="dashboard-section">
+                <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                    <h2 class="section-title mb-0">All Events</h2>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <label for="categoryFilter" class="visually-hidden">Filter by category</label>
+                        <select id="categoryFilter" class="form-select" style="width: auto;">
+                            <option value="">All Categories</option>
+                            <option>Technology</option>
+                            <option>Cultural</option>
+                            <option>Career</option>
+                            <option>Sports</option>
+                        </select>
+                        <div class="input-group" style="width: 260px;">
+                            <label for="eventSearch" class="visually-hidden">Search events</label>
+                            <input id="eventSearch" type="text" class="form-control" placeholder="Search events...">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="events-container"></div>
+            </div>
+        </section>
+
+        <!-- Dashboard -->
+        <section id="dashboard-section" class="section d-none">
+            <div class="row" id="stats-row">
+                <div class="col-md-3 mb-4"><div class="stat-card"><div class="stat-number" id="stat-registered">0</div><div class="stat-label">Registered Events</div></div></div>
+                <div class="col-md-3 mb-4"><div class="stat-card"><div class="stat-number" id="stat-upcoming">0</div><div class="stat-label">Upcoming Events</div></div></div>
+                <div class="col-md-3 mb-4"><div class="stat-card"><div class="stat-number" id="stat-pending">0</div><div class="stat-label">Pending Approvals</div></div></div>
+                <div class="col-md-3 mb-4"><div class="stat-card"><div class="stat-number" id="stat-created">0</div><div class="stat-label">Events Created</div></div></div>
+            </div>
+
+            <div class="dashboard-section">
+                <h3 class="section-title">My Upcoming Events</h3>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Event Name</th><th>Date</th><th>Venue</th><th>Status</th><th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="my-events-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Create Event -->
+        <section id="create-section" class="section d-none">
+            <div class="dashboard-section">
+                <h2 class="section-title">Create a New Event</h2>
+                <form id="createEventForm" class="row g-3" novalidate>
+                    <div class="col-md-6">
+                        <label class="form-label" for="ceTitle">Event Title *</label>
+                        <input type="text" class="form-control" id="ceTitle" required minlength="3">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="ceCategory">Category *</label>
+                        <select class="form-select" id="ceCategory" required>
+                            <option value="">Choose...</option>
+                            <option>Technology</option><option>Cultural</option>
+                            <option>Career</option><option>Sports</option><option>Workshop</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="ceDate">Date *</label>
+                        <input type="date" class="form-control" id="ceDate" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="ceTime">Time *</label>
+                        <input type="time" class="form-control" id="ceTime" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="ceCapacity">Max Participants *</label>
+                        <input type="number" class="form-control" id="ceCapacity" min="1" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="ceVenue">Venue *</label>
+                        <input type="text" class="form-control" id="ceVenue" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="cePrice">Registration Fee (USD)</label>
+                        <input type="number" class="form-control" id="cePrice" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="ceDescription">Description *</label>
+                        <textarea class="form-control" id="ceDescription" rows="4" required minlength="20"></textarea>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="ceApproval">
+                            <label class="form-check-label" for="ceApproval">Require approval for registrations</label>
+                        </div>
+                    </div>
+                    <div class="col-12 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-plus me-2"></i>Create Event</button>
+                        <button type="reset" class="btn btn-outline-secondary">Reset</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Profile (simple) -->
+        <section id="profile-section" class="section d-none">
+            <div class="dashboard-section">
+                <h2 class="section-title">My Profile</h2>
+                <div class="row">
+                    <div class="col-md-3 text-center">
+                        <i class="fas fa-user-circle fa-6x text-primary mb-3"></i>
+                        <h4>Alex Johnson</h4>
+                        <p class="text-muted">Computer Science • Year 3</p>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="mb-3"><strong>Email:</strong> alex.johnson@unisphere.edu</div>
+                        <div class="mb-3"><strong>Student ID:</strong> UNI-2023-0451</div>
+                        <div class="mb-3"><strong>Member since:</strong> September 2023</div>
+                        <div class="mb-3"><strong>Registered Events:</strong> <span id="profile-count">0</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- My Events (alias to dashboard table) -->
+        <section id="my-events-section" class="section d-none">
+            <div class="dashboard-section">
+                <h2 class="section-title">My Events</h2>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead><tr><th>Event</th><th>Date</th><th>Venue</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody id="my-events-tbody-2"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h4><i class="fas fa-globe-americas me-2"></i>UniSphere Events</h4>
+                    <p class="mt-3">The ultimate platform for managing college events with advanced features and seamless user experience.</p>
+                    <div class="d-flex gap-3 mt-4">
+                        <a href="#" class="text-light" aria-label="Facebook"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="text-light" aria-label="Twitter"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-light" aria-label="Instagram"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-light" aria-label="LinkedIn"><i class="fab fa-linkedin fa-lg"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-light text-decoration-none" data-section="home">Home</a></li>
+                        <li class="mb-2"><a href="#" class="text-light text-decoration-none" data-section="events">Events</a></li>
+                        <li class="mb-2"><a href="#" class="text-light text-decoration-none" data-section="dashboard">Dashboard</a></li>
+                        <li class="mb-2"><a href="#" class="text-light text-decoration-none" data-section="create">Create Event</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5>Contact Us</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> University Campus, City</li>
+                        <li class="mb-2"><i class="fas fa-phone me-2"></i> +1 (555) 123-4567</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@unisphere.edu</li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5>Newsletter</h5>
+                    <p>Subscribe to get updates on upcoming events</p>
+                    <form id="newsletterForm" class="input-group" novalidate>
+                        <label for="newsletterEmail" class="visually-hidden">Email</label>
+                        <input type="email" id="newsletterEmail" class="form-control" placeholder="Your email" required>
+                        <button class="btn btn-primary" type="submit">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <hr class="my-4 bg-light">
+            <div class="text-center"><p class="mb-0">&copy; 2024 UniSphere Events. All rights reserved.</p></div>
+        </div>
+    </footer>
+
+    <!-- Event Details Modal -->
+    <div class="modal fade" id="eventModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventModalTitle">Event Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="eventModalBody"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Complete Your Registration</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="paymentModalBody"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Receipt Modal -->
+    <div class="modal fade" id="receiptModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Payment Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="receiptModalBody"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div class="modal fade" id="qrModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Event Check-in QR Code</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="qr-container">
+                        <div id="qrcode" aria-label="QR code for event check-in"></div>
+                        <h5 class="mt-3" id="qrEventName">Event</h5>
+                        <p class="text-muted">Show this QR code at the event venue for check-in</p>
+                        <button class="btn btn-outline-primary mt-2" onclick="window.print()">
+                            <i class="fas fa-print me-2"></i>Print QR Code
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./js/auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script>
+        /* =========================================================
+           STATE
+           ========================================================= */
+        const STORAGE_KEY = 'unisphere_events_v1';
+
+        const seedEvents = [
+            {
+                id: 1,
+                title: "Tech Innovation Summit",
+                description: "Explore the latest in AI, blockchain, and emerging technologies with industry experts. This event features keynote speakers, hands-on workshops, and networking opportunities with tech leaders.",
+                date: "2025-11-15", time: "10:00",
+                venue: "Main Auditorium", category: "Technology", organizer: "Tech Club",
+                maxParticipants: 200, currentParticipants: 145,
+                image: "https://images.unsplash.com/photo-1531058020387-3be344556be6?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                status: "approved", requiresApproval: false, price: 25.00
+            },
+            {
+                id: 2,
+                title: "Annual Cultural Fest",
+                description: "A vibrant celebration of diverse cultures with performances, food, and art exhibitions. Experience music, dance, and traditions from around the world in this day-long festival.",
+                date: "2025-10-22", time: "18:00",
+                venue: "Open Air Theater", category: "Cultural", organizer: "Cultural Committee",
+                maxParticipants: 300, currentParticipants: 278,
+                image: "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                status: "approved", requiresApproval: true, price: 15.00
+            },
+            {
+                id: 3,
+                title: "Spring Career Fair",
+                description: "Connect with top employers and explore internship and job opportunities across various industries. Bring your resume and make valuable professional connections.",
+                date: "2025-12-05", time: "09:00",
+                venue: "Student Center", category: "Career", organizer: "Career Services",
+                maxParticipants: 150, currentParticipants: 89,
+                image: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                status: "approved", requiresApproval: false, price: 0.00
+            },
+            {
+                id: 4,
+                title: "Winter Sports Tournament",
+                description: "Compete in various sports including basketball, soccer, and volleyball. Open to all students with prizes for winning teams.",
+                date: "2025-12-12", time: "08:00",
+                venue: "University Stadium", category: "Sports", organizer: "Athletics Department",
+                maxParticipants: 100, currentParticipants: 67,
+                image: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                status: "approved", requiresApproval: false, price: 10.00
+            }
+        ];
+
+        // My registrations (status per event id)
+        const myRegistrations = {
+            1: { status: 'Registered' },
+            2: { status: 'Pending' },
+            3: { status: 'Registered' }
+        };
+
+        let events = loadEvents();
+
+        function loadEvents() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) return JSON.parse(saved);
+            } catch (e) { /* ignore */ }
+            return JSON.parse(JSON.stringify(seedEvents));
+        }
+
+        function saveEvents() {
+            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(events)); }
+            catch (e) { /* ignore quota errors */ }
+        }
+
+        /* =========================================================
+           UTILITIES
+           ========================================================= */
+        const $ = (sel, root = document) => root.querySelector(sel);
+        const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+
+        function escapeHtml(str = '') {
+            return String(str).replace(/[&<>"']/g, c => ({
+                '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+            }[c]));
+        }
+
+        function formatDate(isoDate) {
+            // ISO YYYY-MM-DD → "Nov 15, 2025"
+            const [y, m, d] = isoDate.split('-').map(Number);
+            const date = new Date(y, m - 1, d);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        function formatTime(t) {
+            // "10:00" → "10:00 AM"
+            const [h, min] = t.split(':').map(Number);
+            const period = h >= 12 ? 'PM' : 'AM';
+            const hour12 = ((h + 11) % 12) + 1;
+            return `${hour12}:${String(min).padStart(2, '0')} ${period}`;
+        }
+
+        function priceLabel(price) {
+            return price > 0 ? `$${price.toFixed(2)}` : 'Free';
+        }
+
+        function progressColor(percent) {
+            if (percent >= 90) return 'bg-danger';
+            if (percent >= 70) return 'bg-warning';
+            return 'bg-success';
+        }
+
+        // Safe modal helper: hide existing before showing new (avoids backdrop stacking)
+        function showModal(id) {
+            const el = document.getElementById(id);
+            // Hide any other visible modals
+            $$('.modal.show').forEach(m => {
+                if (m.id !== id) bootstrap.Modal.getInstance(m)?.hide();
+            });
+            return bootstrap.Modal.getOrCreateInstance(el).show();
+        }
+        function hideModal(id) {
+            const inst = bootstrap.Modal.getInstance(document.getElementById(id));
+            if (inst) inst.hide();
+        }
+
+        /* =========================================================
+           NAVIGATION
+           ========================================================= */
+        const SECTIONS = ['home','events','dashboard','create','profile','my-events'];
+
+        function showSection(name) {
+            if (!SECTIONS.includes(name)) name = 'home';
+            SECTIONS.forEach(s => {
+                const el = document.getElementById(`${s}-section`);
+                if (el) el.classList.toggle('d-none', s !== name);
+            });
+
+            // Update nav active state
+            $$('.nav-link[data-section]').forEach(a => {
+                a.classList.toggle('active', a.dataset.section === name);
+            });
+
+            // Close mobile navbar
+            const nav = document.getElementById('navbarNav');
+            if (nav.classList.contains('show')) bootstrap.Collapse.getInstance(nav)?.hide();
+
+            // Section-specific init
+            if (name === 'events') renderEventsSection();
+            if (name === 'home') renderUpcomingEvents();
+            if (name === 'dashboard') renderDashboard();
+            if (name === 'my-events') renderMyEventsTable('my-events-tbody-2');
+            if (name === 'profile') {
+                $('#profile-count').textContent = Object.keys(myRegistrations).length;
+            }
+            if (name === 'create') {
+                // set min date to today
+                const today = new Date().toISOString().split('T')[0];
+                $('#ceDate').min = today;
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Wire up all data-section buttons/links
+        document.addEventListener('click', (e) => {
+            const trigger = e.target.closest('[data-section]');
+            if (!trigger) return;
+            e.preventDefault();
+            showSection(trigger.dataset.section);
+        });
+
+        /* =========================================================
+           RENDERING
+           ========================================================= */
+        function eventCardHtml(event, { compact = true } = {}) {
+            const percent = Math.min(100, (event.currentParticipants / event.maxParticipants) * 100);
+            const color = progressColor(percent);
+            const isFull = event.currentParticipants >= event.maxParticipants;
+            const desc = compact ? event.description.substring(0, 100) : event.description;
+
+            return `
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <article class="card event-card">
+                        <div class="position-relative">
+                            <img src="${escapeHtml(event.image)}" class="event-img" alt="${escapeHtml(event.title)}"
+                                 onerror="this.src='https://via.placeholder.com/600x400?text=Event'">
+                            <span class="badge category-badge bg-primary">${escapeHtml(event.category)}</span>
+                            ${isFull ? '<span class="badge bg-danger category-badge" style="right:auto;left:10px;">FULL</span>' : ''}
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">${escapeHtml(event.title)}</h5>
+                            <p class="card-text text-muted small flex-grow-1">${escapeHtml(desc)}${compact ? '…' : ''}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="badge bg-light text-dark"><i class="fas fa-calendar me-1"></i>${formatDate(event.date)}</span>
+                                    <span class="badge bg-light text-dark ms-1"><i class="fas fa-users me-1"></i>${event.currentParticipants}/${event.maxParticipants}</span>
+                                </div>
+                                <span class="badge ${event.price > 0 ? 'bg-success' : 'bg-info'}">${priceLabel(event.price)}</span>
+                            </div>
+                            <div class="progress mt-2" role="progressbar" aria-valuenow="${Math.round(percent)}" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar ${color}" style="width: ${percent}%"></div>
+                            </div>
+                            <div class="d-grid mt-3">
+                                <button class="btn btn-primary btn-sm" data-event-id="${event.id}">
+                                    View Details ${isFull ? '' : '& Register'}
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            `;
+        }
+
+        function renderUpcomingEvents() {
+            const container = $('#upcoming-events');
+            const upcoming = events
+                .filter(e => e.status === 'approved')
+                .slice()
+                .sort((a, b) => a.date.localeCompare(b.date))
+                .slice(0, 3);
+            container.innerHTML = upcoming.length
+                ? upcoming.map(e => eventCardHtml(e)).join('')
+                : `<div class="col-12 empty-state"><i class="fas fa-calendar-times"></i><p>No upcoming events</p></div>`;
+        }
+
+        function renderEventsSection() {
+            const container = $('#events-container');
+            const category = $('#categoryFilter').value;
+            const query = $('#eventSearch').value.trim().toLowerCase();
+
+            const filtered = events.filter(e => {
+                const matchCat = !category || e.category === category;
+                const matchQuery = !query ||
+                    e.title.toLowerCase().includes(query) ||
+                    e.description.toLowerCase().includes(query) ||
+                    e.venue.toLowerCase().includes(query);
+                return matchCat && matchQuery;
+            });
+
+            container.innerHTML = filtered.length
+                ? filtered.map(e => eventCardHtml(e)).join('')
+                : `<div class="col-12 empty-state"><i class="fas fa-search"></i><p>No events match your filters.</p></div>`;
+        }
+
+        // Filter events
+        $('#categoryFilter')?.addEventListener('change', renderEventsSection);
+        $('#eventSearch')?.addEventListener('input', renderEventsSection);
+
+        /* =========================================================
+           EVENT DETAILS + REGISTRATION
+           ========================================================= */
+        function getEvent(id) { return events.find(e => e.id === Number(id)); }
+
+        function showEventDetails(eventId) {
+            const event = getEvent(eventId);
+            if (!event) return;
+
+            const percent = Math.min(100, (event.currentParticipants / event.maxParticipants) * 100);
+            const isFull = event.currentParticipants >= event.maxParticipants;
+            const alreadyRegistered = myRegistrations[event.id];
+
+            const modalContent = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <img src="${escapeHtml(event.image)}" class="img-fluid rounded" alt="${escapeHtml(event.title)}"
+                             onerror="this.src='https://via.placeholder.com/600x400?text=Event'">
+                    </div>
+                    <div class="col-md-6">
+                        <h4>${escapeHtml(event.title)}</h4>
+                        <p class="text-muted">${escapeHtml(event.description)}</p>
+                        <div class="mb-3"><strong><i class="fas fa-calendar me-2"></i>Date & Time:</strong><br>${formatDate(event.date)} at ${formatTime(event.time)}</div>
+                        <div class="mb-3"><strong><i class="fas fa-map-marker-alt me-2"></i>Venue:</strong><br>${escapeHtml(event.venue)}</div>
+                        <div class="mb-3"><strong><i class="fas fa-users me-2"></i>Organizer:</strong><br>${escapeHtml(event.organizer)}</div>
+                        <div class="mb-3"><strong><i class="fas fa-tag me-2"></i>Category:</strong> <span class="badge bg-primary">${escapeHtml(event.category)}</span></div>
+                        <div class="mb-3"><strong>Registration Fee:</strong><h4 class="text-primary">${priceLabel(event.price)}</h4></div>
+                        <div class="mb-3">
+                            <strong>Capacity:</strong>
+                            <div class="progress mt-1" role="progressbar" aria-valuenow="${Math.round(percent)}" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar ${progressColor(percent)}" style="width: ${percent}%">
+                                    ${event.currentParticipants}/${event.maxParticipants} registered
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12 d-flex justify-content-between flex-wrap gap-2">
+                        ${alreadyRegistered
+                            ? `<button class="btn btn-success btn-lg" disabled>
+                                   <i class="fas fa-check me-2"></i>Already Registered (${alreadyRegistered.status})
+                               </button>
+                               <button class="btn btn-outline-info" onclick="showQRCode(${event.id})">
+                                   <i class="fas fa-qrcode me-2"></i>Show QR Code
+                               </button>`
+                            : `<button class="btn btn-primary btn-lg" ${isFull ? 'disabled' : ''} onclick="startRegistration(${event.id})">
+                                   <i class="fas fa-ticket-alt me-2"></i>${isFull ? 'Event Full' : 'Register Now'}
+                               </button>`
+                        }
+                    </div>
+                </div>
+            `;
+
+            $('#eventModalTitle').textContent = event.title;
+            $('#eventModalBody').innerHTML = modalContent;
+            showModal('eventModal');
+        }
+
+        // Delegated click for event cards
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-event-id]');
+            if (btn) showEventDetails(btn.dataset.eventId);
+        });
+
+        function startRegistration(eventId) {
+            const event = getEvent(eventId);
+            if (!event) return;
+            hideModal('eventModal');
+            // Wait for hide animation before showing new modal
+            setTimeout(() => showPaymentModal(event), 200);
+        }
+
+        /* =========================================================
+           PAYMENT
+           ========================================================= */
+        function showPaymentModal(event) {
+            const priceDisplay = priceLabel(event.price);
+            const isPaid = event.price > 0;
+
+            const paymentContent = `
+                <div class="payment-card">
+                    <h4 class="mb-4">Complete Your Registration</h4>
+                    <div class="mb-4">
+                        <h5>Event: ${escapeHtml(event.title)}</h5>
+                        <p class="text-muted">${formatDate(event.date)} at ${formatTime(event.time)} | ${escapeHtml(event.venue)}</p>
+                    </div>
+                    <div class="mb-4"><h5>Registration Fee: ${priceDisplay}</h5></div>
+
+                    ${isPaid ? `
+                    <div class="mb-4">
+                        <h5 class="mb-3">Select Payment Method</h5>
+                        <div class="payment-method active" data-method="card" role="button" tabindex="0">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-credit-card fa-2x text-primary me-3"></i>
+                                <div><h6 class="mb-1">Credit/Debit Card</h6><p class="text-muted mb-0">Pay securely with your card</p></div>
+                            </div>
+                        </div>
+                        <div class="payment-method" data-method="paypal" role="button" tabindex="0">
+                            <div class="d-flex align-items-center">
+                                <i class="fab fa-paypal fa-2x text-primary me-3"></i>
+                                <div><h6 class="mb-1">PayPal</h6><p class="text-muted mb-0">Pay with your PayPal account</p></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="cardPaymentForm">
+                        <h5 class="mb-3">Card Details</h5>
+                        <div class="mb-3">
+                            <label class="form-label" for="cardNumber">Card Number</label>
+                            <input type="text" class="card-input" id="cardNumber" inputmode="numeric"
+                                   placeholder="1234 5678 9012 3456" maxlength="19" autocomplete="cc-number">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label" for="cardExpiry">Expiry Date</label>
+                                <input type="text" class="card-input" id="cardExpiry" placeholder="MM/YY" maxlength="5" autocomplete="cc-exp">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label" for="cardCvv">CVV</label>
+                                <input type="text" class="card-input" id="cardCvv" placeholder="123" maxlength="4" inputmode="numeric" autocomplete="cc-csc">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="cardName">Cardholder Name</label>
+                            <input type="text" class="card-input" id="cardName" placeholder="John Doe" autocomplete="cc-name">
+                        </div>
+                    </div>
+
+                    <div class="d-grid mt-4">
+                        <button class="btn btn-primary btn-lg" id="payBtn" onclick="processPayment(${event.id})">
+                            <i class="fas fa-lock me-2"></i>Pay ${priceDisplay} & Register
+                        </button>
+                    </div>
+                    ` : `
+                    <div class="d-grid mt-4">
+                        <button class="btn btn-primary btn-lg" onclick="processPayment(${event.id})">
+                            <i class="fas fa-check me-2"></i>Complete Free Registration
+                        </button>
+                    </div>
+                    `}
+                </div>
+            `;
+
+            $('#paymentModalBody').innerHTML = paymentContent;
+            showModal('paymentModal');
+
+            // Wire payment method selection (delegated, fixes the original bug)
+            if (isPaid) {
+                $$('#paymentModalBody .payment-method').forEach(el => {
+                    el.addEventListener('click', () => selectPaymentMethod(el));
+                    el.addEventListener('keydown', (ev) => {
+                        if (ev.key === 'Enter' || ev.key === ' ') {
+                            ev.preventDefault();
+                            selectPaymentMethod(el);
+                        }
+                    });
+                });
+                // Formatting helpers
+                $('#cardNumber')?.addEventListener('input', (e) => {
+                    e.target.value = e.target.value.replace(/\D/g,'').slice(0,16).replace(/(.{4})/g,'$1 ').trim();
+                });
+                $('#cardExpiry')?.addEventListener('input', (e) => {
+                    let v = e.target.value.replace(/\D/g,'').slice(0,4);
+                    if (v.length >= 3) v = v.slice(0,2) + '/' + v.slice(2);
+                    e.target.value = v;
+                });
+                $('#cardCvv')?.addEventListener('input', (e) => {
+                    e.target.value = e.target.value.replace(/\D/g,'').slice(0,4);
+                });
+            }
+        }
+
+        function selectPaymentMethod(el) {
+            $$('#paymentModalBody .payment-method').forEach(m => m.classList.remove('active'));
+            el.classList.add('active');
+            const method = el.dataset.method;
+            const cardForm = $('#cardPaymentForm');
+            if (cardForm) cardForm.classList.toggle('d-none', method !== 'card');
+        }
+
+        function validateCardPayment() {
+            const num = $('#cardNumber')?.value.replace(/\s/g,'') || '';
+            const exp = $('#cardExpiry')?.value || '';
+            const cvv = $('#cardCvv')?.value || '';
+            const name = $('#cardName')?.value.trim() || '';
+
+            if (num.length < 13) return 'Please enter a valid card number.';
+            if (!/^\d{2}\/\d{2}$/.test(exp)) return 'Please enter expiry as MM/YY.';
+
+            const [mm, yy] = exp.split('/').map(Number);
+            if (mm < 1 || mm > 12) return 'Expiry month must be between 01 and 12.';
+            const now = new Date();
+            const expDate = new Date(2000 + yy, mm, 0); // last day of expiry month
+            if (expDate < now) return 'Card has expired.';
+
+            if (cvv.length < 3) return 'Please enter a valid CVV.';
+            if (name.length < 2) return 'Please enter the cardholder name.';
+            return null;
+        }
+
+        function processPayment(eventId) {
+            const event = getEvent(eventId);
+            if (!event) return;
+
+            if (event.price > 0 && $('#cardPaymentForm') && !$('#cardPaymentForm').classList.contains('d-none')) {
+                const error = validateCardPayment();
+                if (error) { showNotification(error, 'danger'); return; }
+            }
+
+            hideModal('paymentModal');
+
+            // Record registration & increment participant count (guarded)
+            myRegistrations[event.id] = {
+                status: event.requiresApproval ? 'Pending' : 'Registered'
+            };
+            if (event.currentParticipants < event.maxParticipants) {
+                event.currentParticipants++;
+                saveEvents();
+            }
+
+            setTimeout(() => showReceipt(event), 200);
+            showNotification(
+                event.requiresApproval
+                    ? 'Registration submitted — pending approval.'
+                    : 'Successfully registered for the event!'
+            );
+        }
+
+        function showReceipt(event) {
+            const priceDisplay = priceLabel(event.price);
+            const transactionId = 'TXN' + Math.floor(100000 + Math.random() * 900000);
+            const dateString = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+            const receiptContent = `
+                <div class="receipt">
+                    <div class="receipt-header text-center">
+                        <h4 class="text-success"><i class="fas fa-check-circle me-2"></i>Payment Successful</h4>
+                        <p class="text-muted">Thank you for your registration!</p>
+                    </div>
+                    <div class="receipt-item"><span>Event:</span><span><strong>${escapeHtml(event.title)}</strong></span></div>
+                    <div class="receipt-item"><span>Date:</span><span>${formatDate(event.date)} at ${formatTime(event.time)}</span></div>
+                    <div class="receipt-item"><span>Venue:</span><span>${escapeHtml(event.venue)}</span></div>
+                    <div class="receipt-item"><span>Transaction ID:</span><span>${transactionId}</span></div>
+                    <div class="receipt-item"><span>Payment Date:</span><span>${dateString}</span></div>
+                    <div class="receipt-item"><span>Registration Fee:</span><span>${priceDisplay}</span></div>
+                    ${event.price > 0 ? `<div class="receipt-item"><span>Payment Method:</span><span>Credit Card</span></div>` : ''}
+                    <div class="receipt-total"><span>Total Paid:</span><span>${priceDisplay}</span></div>
+                    <div class="mt-4 text-center d-flex gap-2 justify-content-center flex-wrap">
+                        <button class="btn btn-outline-primary" onclick="window.print()">
+                            <i class="fas fa-print me-2"></i>Print Receipt
+                        </button>
+                        <button class="btn btn-primary" onclick="closeAndShowQR(${event.id})">
+                            <i class="fas fa-qrcode me-2"></i>View QR Code
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            $('#receiptModalBody').innerHTML = receiptContent;
+            showModal('receiptModal');
+        }
+
+        function closeAndShowQR(eventId) {
+            hideModal('receiptModal');
+            setTimeout(() => showQRCode(eventId), 200);
+        }
+
+        /* =========================================================
+           QR CODE (real)
+           ========================================================= */
+        function showQRCode(eventId) {
+            const event = eventId ? getEvent(eventId) : events[0];
+            if (!event) return;
+
+            // Close any open modals first
+            $$('.modal.show').forEach(m => bootstrap.Modal.getInstance(m)?.hide());
+
+            setTimeout(() => {
+                $('#qrEventName').textContent = event.title;
+                const qrContainer = $('#qrcode');
+                qrContainer.innerHTML = '';
+                if (window.QRCode) {
+                    new QRCode(qrContainer, {
+                        text: `UNISPHERE|EVENT:${event.id}|${event.title}`,
+                        width: 200,
+                        height: 200,
+                        colorDark: '#1e293b',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.M
+                    });
+                } else {
+                    qrContainer.innerHTML = '<div class="text-muted p-4">QR library failed to load</div>';
+                }
+                showModal('qrModal');
+            }, 200);
+        }
+
+        /* =========================================================
+           DASHBOARD
+           ========================================================= */
+        function renderDashboard() {
+            const registeredCount = Object.keys(myRegistrations).length;
+            const upcomingCount = events.filter(e => e.status === 'approved' && new Date(e.date) >= new Date()).length;
+            const pendingCount = Object.values(myRegistrations).filter(r => r.status === 'Pending').length;
+            const createdCount = events.filter(e => e.organizer === 'Tech Club').length; // demo
+
+            animateNumber($('#stat-registered'), registeredCount);
+            animateNumber($('#stat-upcoming'), upcomingCount);
+            animateNumber($('#stat-pending'), pendingCount);
+            animateNumber($('#stat-created'), createdCount || 5);
+
+            renderMyEventsTable('my-events-tbody');
+        }
+
+        function animateNumber(el, target) {
+            if (!el) return;
+            const duration = 500;
+            const start = parseInt(el.textContent) || 0;
+            const startTime = performance.now();
+            function step(now) {
+                const t = Math.min(1, (now - startTime) / duration);
+                el.textContent = Math.round(start + (target - start) * t);
+                if (t < 1) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+        }
+
+        function renderMyEventsTable(tbodyId) {
+            const tbody = document.getElementById(tbodyId);
+            if (!tbody) return;
+
+            const rows = Object.entries(myRegistrations).map(([id, info]) => {
+                const event = getEvent(id);
+                if (!event) return '';
+                const badgeClass = info.status === 'Registered' ? 'bg-success'
+                                 : info.status === 'Pending' ? 'bg-warning text-dark'
+                                 : 'bg-secondary';
+                return `
+                    <tr>
+                        <td>${escapeHtml(event.title)}</td>
+                        <td>${formatDate(event.date)}</td>
+                        <td>${escapeHtml(event.venue)}</td>
+                        <td><span class="badge ${badgeClass}">${info.status}</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary" data-event-id="${event.id}">View</button>
+                            ${info.status === 'Registered'
+                                ? `<button class="btn btn-sm btn-outline-info" onclick="showQRCode(${event.id})">QR Code</button>`
+                                : ''}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            tbody.innerHTML = rows || `<tr><td colspan="5" class="text-center text-muted py-4">No registrations yet.</td></tr>`;
+        }
+
+        /* =========================================================
+           CREATE EVENT FORM
+           ========================================================= */
+        $('#createEventForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const form = e.currentTarget;
+            if (!form.checkValidity()) {
+                form.classList.add('was-validated');
+                showNotification('Please fill all required fields correctly.', 'danger');
+                return;
+            }
+
+            const newEvent = {
+                id: events.length ? Math.max(...events.map(e => e.id)) + 1 : 1,
+                title: $('#ceTitle').value.trim(),
+                description: $('#ceDescription').value.trim(),
+                date: $('#ceDate').value,
+                time: $('#ceTime').value,
+                venue: $('#ceVenue').value.trim(),
+                category: $('#ceCategory').value,
+                organizer: 'Alex Johnson',
+                maxParticipants: Number($('#ceCapacity').value),
+                currentParticipants: 0,
+                image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+                status: 'approved',
+                requiresApproval: $('#ceApproval').checked,
+                price: Number($('#cePrice').value) || 0
+            };
+
+            events.push(newEvent);
+            saveEvents();
+
+            form.reset();
+            form.classList.remove('was-validated');
+            showNotification(`Event "${newEvent.title}" created successfully!`);
+            showSection('events');
+        });
+
+        /* =========================================================
+           NOTIFICATION
+           ========================================================= */
+        function showNotification(message, type = 'success') {
+            // Remove any existing notification with same message
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type} notification shadow`;
+            notification.setAttribute('role', 'alert');
+            notification.innerHTML = `
+                <div class="d-flex align-items-start gap-2">
+                    <div class="flex-grow-1">${escapeHtml(message)}</div>
+                    <button type="button" class="btn-close" aria-label="Close"></button>
+                </div>
+            `;
+            notification.querySelector('.btn-close').addEventListener('click', () => notification.remove());
+            document.body.appendChild(notification);
+            setTimeout(() => notification.parentElement && notification.remove(), 5000);
+        }
+
+        /* =========================================================
+           NEWSLETTER (demo)
+           ========================================================= */
+        $('#newsletterForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = $('#newsletterEmail').value.trim();
+            if (!email || !email.includes('@')) {
+                showNotification('Please enter a valid email address.', 'danger');
+                return;
+            }
+            showNotification('Subscribed! Check your inbox to confirm.');
+            e.currentTarget.reset();
+        });
+
+        /* =========================================================
+           INIT
+           ========================================================= */
+        document.addEventListener('DOMContentLoaded', () => {
+            showSection('home');
+        });
+    </script>
+</body>
+</html>
